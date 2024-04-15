@@ -2,12 +2,14 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from app.auth.router import auth_router
+from app.riddle.router import riddle_router
 
 app = FastAPI(
     default_response_class=ORJSONResponse
 )
 
 app.include_router(auth_router)
+app.include_router(riddle_router)
 
 @app.get("/ping")
 async def ping():

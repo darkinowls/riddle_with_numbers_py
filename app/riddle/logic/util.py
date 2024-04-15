@@ -1,4 +1,4 @@
-from riddle.cell import Cell
+from app.riddle.logic.cell import Cell
 
 
 def duplicate_matrix(matrix: list[list[Cell]]) -> list[list[Cell]]:

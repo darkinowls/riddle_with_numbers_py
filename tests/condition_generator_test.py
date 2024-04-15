@@ -1,6 +1,6 @@
 import unittest
 
-from app.riddle.logic.condition_generator import generate_all_matrices
+from app.riddle.logic.condition_generator import generate_all_matrices, _reshape_to_matrix
 
 
 class TestRiddleFunctions(unittest.TestCase):

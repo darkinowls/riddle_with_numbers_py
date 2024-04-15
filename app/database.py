@@ -9,6 +9,8 @@ DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{D
 
 Base = declarative_base()
 
+meta_data = Base.metadata
+
 my_engine = create_async_engine(
     DATABASE_URL,
     echo=True,

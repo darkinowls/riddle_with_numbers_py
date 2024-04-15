@@ -4,7 +4,7 @@ import orjson
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_users import FastAPIUsers
 from pydantic import BaseModel, Field
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, text, Row
 
 from app.auth.auth import auth_backend
 from app.auth.models import User
@@ -24,7 +24,7 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](
 
 riddle_router = APIRouter(
     prefix="/riddle",
-    tags=["auth"],
+    tags=["riddle"],
 )
 
 
@@ -35,12 +35,15 @@ class MatrixRequest(BaseModel):
 results: list[list[list[Cell]]] = []
 
 
-@riddle_router.get("/condition/:id")
-async def get_condition(condition_id: int, session=Depends(get_async_session)) -> list[list[int]]:
-    q = select(Solution).where(Solution.id == condition_id)
-    r = await session.execute(q)
-    condition = r.scalars().first()
-    return orjson.loads(condition)
+@riddle_router.get("/condition/:get_id")
+async def get_condition(get_id: int, session=Depends(get_async_session)) -> list[list[int]]:
+    query = select(Solution).where(Solution.id == get_id)
+    res = await session.execute(query)
+    solution: Solution = res.fetchone()[0]
+    print(solution)
+    if not solution:
+        raise HTTPException(status_code=404, detail="Condition not found")
+    return solution.condition
 
 
 @riddle_router.post("/generate/:size")
@@ -48,11 +51,11 @@ async def generate_riddle(size: int, session=Depends(get_async_session)) -> str:
     if size < 2 or size > 3:
         raise HTTPException(status_code=400, detail="Size must be 2 or 3")
 
-    await session.execute('TRUNCATE TABLE "solution" RESTART IDENTITY CASCADE;')
+    await session.execute(text('TRUNCATE TABLE "solution" RESTART IDENTITY CASCADE;'))
     matrices = generate_all_matrices(size)
     for m in matrices:
-        j_bytes = orjson.dumps(m)
-        st = insert(Solution).values(**Solution(condition=j_bytes).dict())
+        # j_bytes = orjson.dumps(m)
+        st = insert(Solution).values({"condition": m})
         await session.execute(st)
 
     await session.commit()

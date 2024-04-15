@@ -1,7 +1,7 @@
 from typing import List
 
-from riddle.cell import Cell
-from riddle.riddle import solve_matrix
+from app.riddle.logic.cell import Cell
+from app.riddle.logic.riddle import solve_matrix
 
 min_value = 1
 max_value = 3

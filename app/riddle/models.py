@@ -7,9 +7,10 @@ from app.database import Base
 
 meta_data = Base.metadata
 
+
 class Solution(Base):
     __tablename__ = "solution"
     id = Column(Integer, primary_key=True)
     condition = Column(JSON, nullable=False)
-    solution = Column(JSON, nullable=False)
-    created_at = mapped_column(TIMESTAMP, default=datetime.now(), nullable=False)
+    solution = Column(JSON, nullable=True)
+    created_at = mapped_column(TIMESTAMP, default=datetime.now())

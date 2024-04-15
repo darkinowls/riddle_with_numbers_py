@@ -1,10 +1,14 @@
 from typing import List
 
+from pydantic import BaseModel
 
-class Cell:
-    def __init__(self, value: int, is_marked: bool = True, ):
-        self.is_marked = is_marked
-        self.value = value
+
+class Cell(BaseModel):
+    is_marked: bool = True
+    value: int
+
+    def __init__(self, value: int, is_marked: bool = True):
+        super().__init__(is_marked=is_marked, value=value)
 
 
 def translate_to_cells(input_data: List[List[int]]) -> List[List[Cell]]:

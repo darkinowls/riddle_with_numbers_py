@@ -1,4 +1,4 @@
-from riddle.cell import Cell
+from app.riddle.logic.cell import Cell
 
 
 def get_task_init() -> list[list[Cell]]:
