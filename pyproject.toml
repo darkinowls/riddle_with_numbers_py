@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "riddle-with-numbers-py"
+version = "0.1.0"
+description = ""
+authors = ["Denys Chernousov <blackInOwls@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.1"
+uvicorn = "^0.29.0"
+pytest = "^8.1.1"
+pytest-cov = "^5.0.0"
+pylint = "^3.1.0"
+orjson = "^3.10.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
