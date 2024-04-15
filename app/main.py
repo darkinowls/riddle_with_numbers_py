@@ -1,18 +1,19 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
+from app.auth.router import auth_router
+
 app = FastAPI(
     default_response_class=ORJSONResponse
 )
 
 app.include_router(auth_router)
 
-@app.get("/")
-async def root():
+@app.get("/ping")
+async def ping():
     return {"message": "pong"}
 
 
-@app.on_event("startup")
-async def startup_event():
-    # just mongo
-    await init_db()
+# @app.on_event("startup")
+# async def startup_event():
+#     pass

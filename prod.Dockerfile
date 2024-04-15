@@ -1,37 +1,22 @@
-# Use the official Golang image
-FROM golang:1.20-alpine as builder
+FROM python:3.11-alpine3.19
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
+WORKDIR /program
 
-# Copy files to the container
-COPY . .
+COPY pyproject.toml .
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
+RUN python -m venv .venv
+RUN source .venv/bin/activate
+ENV PATH="/program/.venv/bin:$PATH"
+
+ENV pythonunbuffered 1
 
 
-# Command to run the executable
-RUN go build -o main main.go
 
-FROM alpine
+RUN pip install poetry
+RUN poetry install
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
 
-# Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/main .
-COPY --from=builder /app/default.env .
-COPY --from=builder /app/wait_for.sh .
-COPY --from=builder /app/start.sh .
-
-#COPY --from=builder /app/db/migrations /app/db/migrations
-
-# Create a directory for Migrate
-#RUN mkdir -p /usr/local/bin
-# Download the Migrate binary
-#RUN wget -O /tmp/migrate.tar.gz https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz
-# Unzip the Migrate binary
-#RUN tar -xzf /tmp/migrate.tar.gz -C /usr/local/bin/ && rm /tmp/migrate.tar.gz
-# Make the binary executable
-#RUN chmod +x /usr/local/bin/migrate
+COPY app /program/app
+#COPY tests /app/tests
+#COPY migrations /app/migrations
+COPY Makefile .

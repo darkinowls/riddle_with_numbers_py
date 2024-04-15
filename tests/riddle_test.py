@@ -1,12 +1,10 @@
 import unittest
 
-from riddle.cell import translate_to_cells, Cell
-from riddle.riddle import solve_matrix, check_if_unique_within_unmarked, combine_matrices, check_if_touches_right_wall, \
-    check_if_touches_bottom_wall, check_side, get_matrix_column
-from riddle.riddle_io import get_example_init, get_example_result
-from riddle.util import compare_matrices, validate_input_matrix, print_matrix, duplicate_matrix
-
-
+from app.riddle.logic.cell import Cell, translate_to_cells
+from app.riddle.logic.riddle import solve_matrix, check_if_unique_within_unmarked, get_matrix_column, check_side, \
+    check_if_touches_bottom_wall, check_if_touches_right_wall, combine_matrices
+from app.riddle.logic.riddle_io import get_example_result, get_example_init
+from app.riddle.logic.util import compare_matrices, duplicate_matrix
 
 
 class TestRiddleFunctions(unittest.TestCase):
