@@ -3,6 +3,8 @@ Main FastAPI application
 """
 
 from app.auth.router import auth_router
+from app.config import DB_NAME
+from app.database import create_test_database
 from app.riddle.router import riddle_router
 
 from fastapi import FastAPI
@@ -21,6 +23,7 @@ async def ping():
     """Check if the server is running"""
     return {"message": "pong"}
 
-# @app.on_event("startup")
-# async def startup_event():
-#     pass
+@app.on_event("startup")
+async def startup_event():
+    """Init on startup"""
+    await create_test_database(DB_NAME)

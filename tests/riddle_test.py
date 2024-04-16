@@ -10,11 +10,28 @@ from app.riddle.logic.riddle import (solve_matrix,
                                      check_if_touches_right_wall,
                                      combine_matrices)
 from app.riddle.logic.riddle_io import get_example_result, get_example_init
-from app.riddle.logic.util import compare_matrices, duplicate_matrix
+from app.riddle.logic.util import compare_matrices, duplicate_matrix, print_matrix
 
 
 class TestRiddleFunctions(unittest.TestCase):
     """Tests for the riddle logic functions."""
+
+    def test_solve(self):
+
+        input = [[1, 1, 1],
+                 [1, 1, 3],
+                 [2, 3, 1]]
+
+        cells = translate_to_cells(input)
+
+        output = solve_matrix(cells)
+
+        expected = [[Cell(1, True), Cell(1, True), Cell(1, False)],
+                    [Cell(1, True), Cell(1, False), Cell(3, False)],
+                    [Cell(2, False), Cell(3, False), Cell(1, True)]]
+
+        self.assertTrue(compare_matrices(output[0], expected))
+
 
     def test_translate_to_cells(self):
         """Test the translation of a matrix to a matrix of cells."""
@@ -51,7 +68,7 @@ class TestRiddleFunctions(unittest.TestCase):
         # Test case with provided example matrix
         example_matrix = get_example_init()
         expected_result = get_example_result()
-        solved_matrix:  list[list[list[Cell]]] | None = solve_matrix(example_matrix)
+        solved_matrix: list[list[list[Cell]]] | None = solve_matrix(example_matrix)
         self.assertIsNotNone(solved_matrix)
         if not solved_matrix:
             return

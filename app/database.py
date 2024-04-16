@@ -1,6 +1,5 @@
 """Database configuration."""
 
-import asyncio
 from typing import AsyncGenerator
 
 import asyncpg
@@ -49,6 +48,3 @@ async def create_test_database(database_name: str):
     finally:
         # Close the connection
         await conn.close()
-
-
-asyncio.run(create_test_database(DB_NAME))

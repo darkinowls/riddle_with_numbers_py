@@ -16,7 +16,7 @@ from .util import duplicate_matrix, is_in_matrix_array, print_matrix
 ###################################################/
 # Solve by pathfinding and combining 2 paths
 
-def solve_matrix(matrix) -> list[list[list[Cell]]] | None:
+def solve_matrix(matrix: list[list[Cell]]) -> list[list[list[Cell]]] | None:
     """Solve the matrix."""
     if len(matrix) == 0 or len(matrix[0]) == 1 or len(matrix) == 1:
         return None
@@ -48,7 +48,6 @@ def solve_matrix(matrix) -> list[list[list[Cell]]] | None:
 
 def make_way_down(origin_matrix, init_row, init_column) -> list[list[list[Cell]]]:
     """Make a way down."""
-    print_matrix(origin_matrix)
     solutions = explore_matrix(origin_matrix, init_row, init_column)
     return [solution for solution in solutions if check_if_touches_bottom_wall(solution)]
 
@@ -107,7 +106,7 @@ def iterate_matrix_and_check_if_good(matrix):
                 or row >= len(matrix) or col >= len(matrix[0])):
             return
 
-        if not matrix[row][col].is_marked:
+        if matrix[row][col].is_marked:
             return
 
         visited.add((row, col))
