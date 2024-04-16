@@ -1,10 +1,9 @@
 import uuid
 
-import orjson
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_users import FastAPIUsers
 from pydantic import BaseModel, Field
-from sqlalchemy import insert, select, text, Row
+from sqlalchemy import insert, select, text
 
 from app.auth.auth import auth_backend
 from app.auth.models import User
@@ -39,11 +38,10 @@ results: list[list[list[Cell]]] = []
 async def get_condition(get_id: int, session=Depends(get_async_session)) -> list[list[int]]:
     query = select(Solution).where(Solution.id == get_id)
     res = await session.execute(query)
-    solution: Solution = res.fetchone()[0]
-    print(solution)
+    solution: tuple[Solution] | None = res.fetchone()
     if not solution:
         raise HTTPException(status_code=404, detail="Condition not found")
-    return solution.condition
+    return solution[0].condition
 
 
 @riddle_router.post("/generate/:size")
