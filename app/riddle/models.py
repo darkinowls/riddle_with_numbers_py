@@ -1,3 +1,5 @@
+"""Riddle models."""
+
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, JSON, TIMESTAMP
@@ -8,7 +10,8 @@ from app.database import Base
 meta_data = Base.metadata
 
 
-class Solution(Base):
+class Solution(Base): # pylint: disable=too-few-public-methods
+    """Solution model."""
     __tablename__ = "solution"
     id = Column(Integer, primary_key=True)
     condition = Column(JSON, nullable=False)

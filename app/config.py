@@ -1,5 +1,7 @@
-from dotenv import load_dotenv
+"""Config file for the app"""
+
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 

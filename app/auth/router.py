@@ -1,12 +1,16 @@
+"""Main module for the FastAPI application."""
+
 import uuid
 
-from fastapi import APIRouter, Depends
+
 from fastapi_users import FastAPIUsers
 
 from app.auth.auth import auth_backend
 from app.auth.models import User
 from app.auth.user_dto import UserRead, UserCreate
 from app.auth.user_manager import get_user_manager
+
+from fastapi import APIRouter
 
 fastapi_users = FastAPIUsers[User, uuid.UUID](
     get_user_manager,

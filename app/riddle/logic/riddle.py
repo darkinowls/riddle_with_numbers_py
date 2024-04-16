@@ -1,3 +1,5 @@
+"""Riddle logic."""
+
 from .cell import Cell
 from .util import duplicate_matrix, is_in_matrix_array, print_matrix
 
@@ -15,6 +17,7 @@ from .util import duplicate_matrix, is_in_matrix_array, print_matrix
 # Solve by pathfinding and combining 2 paths
 
 def solve_matrix(matrix) -> list[list[list[Cell]]] | None:
+    """Solve the matrix."""
     if len(matrix) == 0 or len(matrix[0]) == 1 or len(matrix) == 1:
         return None
 
@@ -36,24 +39,29 @@ def solve_matrix(matrix) -> list[list[list[Cell]]] | None:
     for solution_down in solutions_down:
         for solution_right in solutions_right:
             combined = combine_matrices(solution_down, solution_right)
-            if iterate_matrix_and_check_if_good(combined) and not is_in_matrix_array(combined, solutions):
+            if (iterate_matrix_and_check_if_good(combined)
+                    and not is_in_matrix_array(combined, solutions)):
                 solutions.append(combined)
 
     return solutions if solutions else None
 
 
 def make_way_down(origin_matrix, init_row, init_column) -> list[list[list[Cell]]]:
+    """Make a way down."""
     print_matrix(origin_matrix)
     solutions = explore_matrix(origin_matrix, init_row, init_column)
     return [solution for solution in solutions if check_if_touches_bottom_wall(solution)]
 
 
 def make_way_right(origin_matrix, init_row, init_column) -> list[list[list[Cell]]]:
+    """Make a way right."""
     solutions = explore_matrix(origin_matrix, init_row, init_column)
     return [solution for solution in solutions if check_if_touches_right_wall(solution)]
 
 
-def explore_matrix(start_matrix: list[list[Cell]], start_row, start_column) -> list[list[list[Cell]]]:
+def explore_matrix(start_matrix: list[list[Cell]], start_row, start_column) \
+        -> list[list[list[Cell]]]:
+    """Explore the matrix."""
     solutions = []
 
     def explore(matrix, row: int, column: int):
@@ -78,10 +86,11 @@ def explore_matrix(start_matrix: list[list[Cell]], start_row, start_column) -> l
     return solutions
 
 
-####################################################################################################
+#############################################################################
 # Compare matrix by matrix
 
 def iterate_matrix_and_check_if_good(matrix):
+    """Iterate the matrix and check if it's good."""
     start_col = 0
     for i in range(len(matrix[0])):
         if not matrix[0][i].is_marked:
@@ -92,10 +101,15 @@ def iterate_matrix_and_check_if_good(matrix):
     visited = set()
 
     def iterate(row, col):
+        """Iterate the matrix."""
         nonlocal is_good
-        if (row, col) in visited or row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]) \
-                or matrix[row][col].is_marked:
+        if ((row, col) in visited or row < 0 or col < 0
+                or row >= len(matrix) or col >= len(matrix[0])):
             return
+
+        if not matrix[row][col].is_marked:
+            return
+
         visited.add((row, col))
 
         if not check_if_unique_within_unmarked(matrix, row, col):
@@ -112,34 +126,40 @@ def iterate_matrix_and_check_if_good(matrix):
 
 
 def check_if_unique_within_unmarked(matrix, row_index, column_index):
+    """Check if unique within unmarked."""
     value = matrix[row_index][column_index].value
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
+    for i, row in enumerate(matrix):
+        for j, cell in enumerate(row):
             if j == column_index or i == row_index:
                 if (j, i) == (column_index, row_index):
                     continue
-                if matrix[i][j].value == value and not matrix[i][j].is_marked:
+                if cell.value == value and not cell.is_marked:
                     return False
     return True
 
 
 def get_matrix_column(matrix, column_number):
+    """Get a matrix column."""
     return [row[column_number] for row in matrix]
 
 
 def check_side(solution):
+    """Check the side."""
     return any(not cell.is_marked for cell in solution)
 
 
 def check_if_touches_bottom_wall(solution):
+    """Check if touches the bottom wall."""
     return check_side(solution[-1])
 
 
 def check_if_touches_right_wall(solution):
+    """Check if touches the right wall."""
     return check_side(get_matrix_column(solution, len(solution[0]) - 1))
 
 
 def combine_matrices(matrix1, matrix2):
+    """Combine matrices."""
     combined = duplicate_matrix(matrix1)
     for i in range(len(matrix1)):
         for j in range(len(matrix1[0])):

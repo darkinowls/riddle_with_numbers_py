@@ -9,8 +9,8 @@ from alembic import context
 
 from app.auth.models import meta_data
 from app.config import DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME
-import app.riddle.models  # noqa
-import app.auth.models  # noqa
+import app.riddle.models  # noqa # pylint: disable=all
+import app.auth.models  # noqa # pylint: disable=all
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -38,7 +38,7 @@ target_metadata = [meta_data]
 # ... etc.
 
 
-def run_migrations_offline() -> None:
+def run_migrations_offline() -> None: # pylint: disable=all
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -62,14 +62,14 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection: Connection) -> None:
+def do_run_migrations(connection: Connection) -> None: # pylint: disable=all
     context.configure(connection=connection, target_metadata=target_metadata)
 
     with context.begin_transaction():
         context.run_migrations()
 
 
-async def run_async_migrations() -> None:
+async def run_async_migrations() -> None: # pylint: disable=all
     """In this scenario we need to create an Engine
     and associate a connection with the context.
 
@@ -87,7 +87,7 @@ async def run_async_migrations() -> None:
     await connectable.dispose()
 
 
-def run_migrations_online() -> None:
+def run_migrations_online() -> None: # pylint: disable=all
     """Run migrations in 'online' mode."""
 
     asyncio.run(run_async_migrations())

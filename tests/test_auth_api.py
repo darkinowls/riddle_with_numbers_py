@@ -1,27 +1,16 @@
+"""Tests for the auth API."""
+
 import random
 import string
 
-from httpx import AsyncClient, Cookies
-
-from tests.conftest import ac
+from httpx import AsyncClient
 
 
 # ORDER MATTERS
 
-# async def test_add_role():
-#     async with _async_session_maker() as session:
-#         stmt = insert(Role).values(id=1, name="user")
-#         await session.execute(stmt)
-#         await session.commit()
-#
-#         query = select(Role)
-#         result = await session.execute(query)
-#         role_list = result.scalars().all()
-#         assert len(role_list) == 1
-#         assert role_list[0].name == "user"
 
-
-async def test_register( ac: AsyncClient ) -> str:
+async def test_register(ac: AsyncClient) -> str:
+    """Test if the route registers a user."""
     email = f"{''.join(random.choices(string.ascii_letters, k=20))}@example.com"
 
     data = {
@@ -43,7 +32,8 @@ async def test_register( ac: AsyncClient ) -> str:
     return email
 
 
-async def test_login(ac: AsyncClient) -> Cookies:
+async def test_login(ac: AsyncClient):
+    """Test if the route logs in a user."""
     email = await test_register(ac)
     data = {
         "username": email,
@@ -55,4 +45,4 @@ async def test_login(ac: AsyncClient) -> Cookies:
     assert res.status_code == 204
     jwt = res.cookies.get("JWT")
     assert jwt is not None
-    return res.cookies
+    ac.cookies.set("JWT", jwt)
