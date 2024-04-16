@@ -7,9 +7,9 @@ services:
     ports:
       - "5431:5432"
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
       - db_test:/var/lib/postgresql/data
 
@@ -21,9 +21,7 @@ services:
       - "8081:8081"
     depends_on:
       - db
-    environment:
-      DB_SOURCE: postgresql://myuser:mypassword@db:5432/mydb?sslmode=disable
-    command: sh wait_for.sh db:5432 -- /app/test.sh
+    command: h wait_for.sh db:5432 -- make tests
 
 volumes:
   db_test:
